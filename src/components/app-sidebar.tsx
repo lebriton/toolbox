@@ -13,18 +13,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
-interface NavGroupProps {
-  title: string;
-  items: NavItemProps[];
-}
-
-interface NavItemProps {
+type NavItem = {
   title: string;
   url: string;
   icon: LucideIcon;
-}
+};
 
 const sidebarData = {
   navGroups: [
@@ -55,18 +50,26 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {sidebarData.navGroups.map((props) => (
-          <NavGroup key={props.title} {...props} />
+        {sidebarData.navGroups.map((props, index) => (
+          <NavGroup key={index} {...props} />
         ))}
       </SidebarContent>
     </Sidebar>
   );
 }
 
-export const NavGroup = ({ title, items }: NavGroupProps) => {
+export const NavGroup = ({
+  title,
+  items,
+}: {
+  title: string;
+  items: NavItem[];
+}) => {
+  const pathname = useLocation({ select: (location) => location.pathname });
+
   return (
     <Collapsible defaultOpen className="group/collapsible">
-      <SidebarGroup>
+      <SidebarGroup className="transition-[padding] duration-200 group-data-[state=expanded]:px-4">
         <SidebarGroupLabel asChild>
           <CollapsibleTrigger>
             {title}
@@ -76,8 +79,12 @@ export const NavGroup = ({ title, items }: NavGroupProps) => {
         <CollapsibleContent>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <NavItem {...item} />
+              {items.map((item, index) => (
+                <NavItem
+                  key={index}
+                  item={item}
+                  isActive={item.url == pathname}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -86,14 +93,23 @@ export const NavGroup = ({ title, items }: NavGroupProps) => {
     </Collapsible>
   );
 };
-
-export const NavItem = ({ title, url, icon: Icon }: NavItemProps) => {
+export const NavItem = ({
+  item,
+  isActive,
+}: {
+  item: NavItem;
+  isActive?: boolean;
+}) => {
   return (
-    <SidebarMenuItem key={title}>
-      <SidebarMenuButton tooltip={title} asChild>
-        <Link href={url}>
-          <Icon />
-          <span>{title}</span>
+    <SidebarMenuItem
+      data-active={isActive}
+      className="relative before:absolute before:-left-2 before:top-1 before:h-6 before:w-1 before:rounded-full before:transition-opacity before:duration-200 data-[active=true]:before:bg-primary group-data-[state=collapsed]:before:opacity-0"
+      key={item.title}
+    >
+      <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
+        <Link href={item.url}>
+          <item.icon />
+          <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
