@@ -58,6 +58,12 @@ function RouteComponent() {
       setOutput(func(value));
     }
   };
+  // Call convert() if the config is modified and live mode is on
+  React.useEffect(() => {
+    if (!configWatch.liveMode) return;
+
+    convert(input, configWatch.conversionMode, configWatch.splitLines);
+  }, [configWatch]);
 
   const debouncedConvert = React.useCallback(debounce(convert, 500), []);
 
@@ -179,16 +185,7 @@ function RouteComponent() {
                 placeholder="Type (or paste) the text to encode or decode here."
                 autoFocus
                 value={input}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  setInput(value);
-                  if (configWatch.liveMode)
-                    debouncedConvert(
-                      value,
-                      configWatch.conversionMode,
-                      configWatch.splitLines,
-                    );
-                }}
+                onChange={(event) => setInput(event.target.value)}
               />
             )}
           />
