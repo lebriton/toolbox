@@ -51,6 +51,7 @@ function RouteComponent() {
     value: string,
     conversionMode: "encode" | "decode",
     splitLines: boolean,
+    focusOutput: boolean = false,
   ) => {
     let func = conversionMode === "encode" ? btoa : atob;
 
@@ -71,6 +72,8 @@ function RouteComponent() {
 
     setOutput(result);
     setConversionError(error);
+
+    autoFocusOutputRef.current = focusOutput;
   };
 
   const debouncedConvert = React.useCallback(debounce(convert, 500), []);
@@ -81,6 +84,19 @@ function RouteComponent() {
 
     debouncedConvert(input, configWatch.conversionMode, configWatch.splitLines);
   }, [configWatch]);
+
+  // Auto-select the output text
+  const autoFocusOutputRef = React.useRef<boolean>(false);
+  React.useEffect(() => {
+    if (!autoFocusOutputRef.current) return;
+    autoFocusOutputRef.current = false;
+
+    if (!output || configWatch.liveMode) return;
+
+    // XXX: too lazy to use a ref :)
+    // @ts-ignore
+    document.getElementById("output")?.select();
+  }, [output]);
 
   return (
     <PageBody>
@@ -175,16 +191,14 @@ function RouteComponent() {
               <Button
                 size="sm"
                 disabled={configWatch.liveMode}
-                onClick={() => {
+                onClick={() =>
                   convert(
                     input,
                     configWatch.conversionMode,
                     configWatch.splitLines,
-                  );
-                  // XXX: too lazy to use a ref :)
-                  // @ts-ignore
-                  document.getElementById("output")?.select();
-                }}
+                    true,
+                  )
+                }
               >
                 <ArrowDown />
                 Convert ({configWatch.conversionMode === "encode" && "encode"}
