@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ClipboardManager } from "@/components/clipboard-manager";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { ArrowDown, ArrowDownUp, Binary, Type } from "lucide-react";
+import { ArrowDown, ArrowDownUp, Binary, Frown, Type } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
@@ -42,6 +43,9 @@ function RouteComponent() {
 
   const [input, setInput] = React.useState<string>("");
   const [output, setOutput] = React.useState<string>("");
+  const [conversionError, setConversionError] = React.useState<string | null>(
+    null,
+  );
 
   const convert = (
     value: string,
@@ -50,22 +54,33 @@ function RouteComponent() {
   ) => {
     let func = conversionMode === "encode" ? btoa : atob;
 
-    if (splitLines) {
-      const lines = value.split("\n");
-      const processedLines = lines.map((line) => func(line));
-      setOutput(processedLines.join("\n"));
-    } else {
-      setOutput(func(value));
+    let result = "";
+    let error = null;
+
+    try {
+      if (splitLines) {
+        const lines = value.split("\n");
+        const processedLines = lines.map((line) => func(line));
+        result = processedLines.join("\n");
+      } else {
+        result = func(value);
+      }
+    } catch (err) {
+      error = err instanceof Error ? err.message : "An unknown error occurred";
     }
+
+    setOutput(result);
+    setConversionError(error);
   };
+
+  const debouncedConvert = React.useCallback(debounce(convert, 500), []);
+
   // Call convert() if the config is modified and live mode is on
   React.useEffect(() => {
     if (!configWatch.liveMode) return;
 
-    convert(input, configWatch.conversionMode, configWatch.splitLines);
+    debouncedConvert(input, configWatch.conversionMode, configWatch.splitLines);
   }, [configWatch]);
-
-  const debouncedConvert = React.useCallback(debounce(convert, 500), []);
 
   return (
     <PageBody>
@@ -153,6 +168,13 @@ function RouteComponent() {
       </PageContent>
       <PageContent grow>
         <PageSection>
+          {conversionError !== null && (
+            <Alert className="mb-4" variant="destructive">
+              <Frown className="h-4 w-4" />
+              <AlertTitle>Failed to convert input</AlertTitle>
+              <AlertDescription>{conversionError}</AlertDescription>
+            </Alert>
+          )}
           <FlexLine
             className="mb-1.5"
             start={<Label htmlFor="input">Input</Label>}
