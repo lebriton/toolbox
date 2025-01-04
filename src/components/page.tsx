@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { PropsWithChildren } from "react";
 
 export const Page = ({ children }: PropsWithChildren) => {
@@ -32,6 +33,9 @@ export const PageHeader = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const PageSection = ({ children }: PropsWithChildren) => {
-  return <div className="p-4">{children}</div>;
+export const PageSection = ({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) => {
+  return <div className={cn("p-4", className)}>{children}</div>;
 };
