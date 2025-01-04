@@ -22,7 +22,7 @@ const configSchema = z.object({
   liveMode: z.boolean(),
 });
 
-export const Route = createLazyFileRoute("/tools/base64-text")({
+export const Route = createLazyFileRoute("/toolbox/tools/base64-text")({
   component: RouteComponent,
 });
 

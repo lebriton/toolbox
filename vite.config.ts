@@ -10,4 +10,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  // https://vite.dev/guide/static-deploy#github-pages
+  // > If you are deploying to https://<USERNAME>.github.io/<REPO>/ (eg. your repository is
+  // at https://github.com/<USERNAME>/<REPO>), then set base to '/<REPO>/'.
+  base: "/toolbox/",
 });

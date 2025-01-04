@@ -6,7 +6,7 @@ import { Page, PageHeader } from "@/components/page";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { Separator } from "@/components/ui/separator";
 
-export const Route = createFileRoute("/tools")({
+export const Route = createFileRoute("/toolbox/tools")({
   component: RouteComponent,
 });
 
