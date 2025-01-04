@@ -168,13 +168,6 @@ function RouteComponent() {
       </PageContent>
       <PageContent grow>
         <PageSection>
-          {conversionError !== null && (
-            <Alert className="mb-4" variant="destructive">
-              <Frown className="h-4 w-4" />
-              <AlertTitle>Failed to convert input</AlertTitle>
-              <AlertDescription>{conversionError}</AlertDescription>
-            </Alert>
-          )}
           <FlexLine
             className="mb-1.5"
             start={<Label htmlFor="input">Input</Label>}
@@ -214,6 +207,13 @@ function RouteComponent() {
         </PageSection>
 
         <PageSection>
+          {conversionError !== null && (
+            <Alert className="mb-2" variant="destructive">
+              <Frown className="h-4 w-4" />
+              <AlertTitle>Failed to convert input</AlertTitle>
+              <AlertDescription>{conversionError}</AlertDescription>
+            </Alert>
+          )}
           <FlexLine
             className="mb-1.5"
             start={<Label htmlFor="output">Output</Label>}
