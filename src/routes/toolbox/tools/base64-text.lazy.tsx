@@ -175,13 +175,16 @@ function RouteComponent() {
               <Button
                 size="sm"
                 disabled={configWatch.liveMode}
-                onClick={() =>
+                onClick={() => {
                   convert(
                     input,
                     configWatch.conversionMode,
                     configWatch.splitLines,
-                  )
-                }
+                  );
+                  // XXX: too lazy to use a ref :)
+                  // @ts-ignore
+                  document.getElementById("output")?.select();
+                }}
               >
                 <ArrowDown />
                 Convert ({configWatch.conversionMode === "encode" && "encode"}
