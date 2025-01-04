@@ -28,7 +28,7 @@ const sidebarData = {
       items: [
         {
           title: "Base64 Text",
-          url: "/tools/base64-text",
+          url: "/toolbox/tools/base64-text",
           icon: FileDigit,
         },
       ],
