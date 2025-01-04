@@ -1,4 +1,4 @@
-import { ChevronDown, Home, LucideIcon } from "lucide-react";
+import { ChevronDown, FileDigit, LucideIcon } from "lucide-react";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -24,22 +24,12 @@ type NavItem = {
 const sidebarData = {
   navGroups: [
     {
-      title: "Tools",
+      title: "Encoders & Decoders",
       items: [
         {
-          title: "Tool 1",
-          url: "/tool-1",
-          icon: Home,
-        },
-        {
-          title: "Tool 2",
-          url: "/tool-2",
-          icon: Home,
-        },
-        {
-          title: "Tool 3",
-          url: "/tool-3",
-          icon: Home,
+          title: "Base64 Text",
+          url: "/tools/base64-text",
+          icon: FileDigit,
         },
       ],
     },
@@ -103,7 +93,7 @@ export const NavItem = ({
   return (
     <SidebarMenuItem
       data-active={isActive}
-      className="relative before:absolute before:-left-2 before:top-1 before:h-6 before:w-1 before:rounded-full before:transition-opacity before:duration-200 data-[active=true]:before:bg-primary group-data-[state=collapsed]:before:opacity-0"
+      className="relative before:absolute before:-left-2 before:top-1 before:h-6 before:w-1 before:rounded-full before:transition-opacity before:duration-200 data-[active=true]:before:bg-primary group-data-[mobile=true]:bg-red-400 group-data-[state=collapsed]:before:opacity-0"
       key={item.title}
     >
       <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>

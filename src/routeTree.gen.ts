@@ -8,145 +8,94 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router";
-
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
-import { Route as GenericRouteImport } from "./routes/_generic/route";
-
-// Create Virtual Routes
-
-const GenericTool3LazyImport = createFileRoute("/_generic/tool-3")();
-const GenericTool2LazyImport = createFileRoute("/_generic/tool-2")();
-const GenericTool1LazyImport = createFileRoute("/_generic/tool-1")();
+import { Route as ToolsRouteImport } from "./routes/tools/route";
+import { Route as ToolsBase64TextImport } from "./routes/tools/base64-text";
 
 // Create/Update Routes
 
-const GenericRouteRoute = GenericRouteImport.update({
-  id: "/_generic",
+const ToolsRouteRoute = ToolsRouteImport.update({
+  id: "/tools",
+  path: "/tools",
   getParentRoute: () => rootRoute,
 } as any);
 
-const GenericTool3LazyRoute = GenericTool3LazyImport.update({
-  id: "/tool-3",
-  path: "/tool-3",
-  getParentRoute: () => GenericRouteRoute,
+const ToolsBase64TextRoute = ToolsBase64TextImport.update({
+  id: "/base64-text",
+  path: "/base64-text",
+  getParentRoute: () => ToolsRouteRoute,
 } as any).lazy(() =>
-  import("./routes/_generic/tool-3.lazy").then((d) => d.Route),
-);
-
-const GenericTool2LazyRoute = GenericTool2LazyImport.update({
-  id: "/tool-2",
-  path: "/tool-2",
-  getParentRoute: () => GenericRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_generic/tool-2.lazy").then((d) => d.Route),
-);
-
-const GenericTool1LazyRoute = GenericTool1LazyImport.update({
-  id: "/tool-1",
-  path: "/tool-1",
-  getParentRoute: () => GenericRouteRoute,
-} as any).lazy(() =>
-  import("./routes/_generic/tool-1.lazy").then((d) => d.Route),
+  import("./routes/tools/base64-text.lazy").then((d) => d.Route),
 );
 
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/_generic": {
-      id: "/_generic";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof GenericRouteImport;
+    "/tools": {
+      id: "/tools";
+      path: "/tools";
+      fullPath: "/tools";
+      preLoaderRoute: typeof ToolsRouteImport;
       parentRoute: typeof rootRoute;
     };
-    "/_generic/tool-1": {
-      id: "/_generic/tool-1";
-      path: "/tool-1";
-      fullPath: "/tool-1";
-      preLoaderRoute: typeof GenericTool1LazyImport;
-      parentRoute: typeof GenericRouteImport;
-    };
-    "/_generic/tool-2": {
-      id: "/_generic/tool-2";
-      path: "/tool-2";
-      fullPath: "/tool-2";
-      preLoaderRoute: typeof GenericTool2LazyImport;
-      parentRoute: typeof GenericRouteImport;
-    };
-    "/_generic/tool-3": {
-      id: "/_generic/tool-3";
-      path: "/tool-3";
-      fullPath: "/tool-3";
-      preLoaderRoute: typeof GenericTool3LazyImport;
-      parentRoute: typeof GenericRouteImport;
+    "/tools/base64-text": {
+      id: "/tools/base64-text";
+      path: "/base64-text";
+      fullPath: "/tools/base64-text";
+      preLoaderRoute: typeof ToolsBase64TextImport;
+      parentRoute: typeof ToolsRouteImport;
     };
   }
 }
 
 // Create and export the route tree
 
-interface GenericRouteRouteChildren {
-  GenericTool1LazyRoute: typeof GenericTool1LazyRoute;
-  GenericTool2LazyRoute: typeof GenericTool2LazyRoute;
-  GenericTool3LazyRoute: typeof GenericTool3LazyRoute;
+interface ToolsRouteRouteChildren {
+  ToolsBase64TextRoute: typeof ToolsBase64TextRoute;
 }
 
-const GenericRouteRouteChildren: GenericRouteRouteChildren = {
-  GenericTool1LazyRoute: GenericTool1LazyRoute,
-  GenericTool2LazyRoute: GenericTool2LazyRoute,
-  GenericTool3LazyRoute: GenericTool3LazyRoute,
+const ToolsRouteRouteChildren: ToolsRouteRouteChildren = {
+  ToolsBase64TextRoute: ToolsBase64TextRoute,
 };
 
-const GenericRouteRouteWithChildren = GenericRouteRoute._addFileChildren(
-  GenericRouteRouteChildren,
+const ToolsRouteRouteWithChildren = ToolsRouteRoute._addFileChildren(
+  ToolsRouteRouteChildren,
 );
 
 export interface FileRoutesByFullPath {
-  "": typeof GenericRouteRouteWithChildren;
-  "/tool-1": typeof GenericTool1LazyRoute;
-  "/tool-2": typeof GenericTool2LazyRoute;
-  "/tool-3": typeof GenericTool3LazyRoute;
+  "/tools": typeof ToolsRouteRouteWithChildren;
+  "/tools/base64-text": typeof ToolsBase64TextRoute;
 }
 
 export interface FileRoutesByTo {
-  "": typeof GenericRouteRouteWithChildren;
-  "/tool-1": typeof GenericTool1LazyRoute;
-  "/tool-2": typeof GenericTool2LazyRoute;
-  "/tool-3": typeof GenericTool3LazyRoute;
+  "/tools": typeof ToolsRouteRouteWithChildren;
+  "/tools/base64-text": typeof ToolsBase64TextRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
-  "/_generic": typeof GenericRouteRouteWithChildren;
-  "/_generic/tool-1": typeof GenericTool1LazyRoute;
-  "/_generic/tool-2": typeof GenericTool2LazyRoute;
-  "/_generic/tool-3": typeof GenericTool3LazyRoute;
+  "/tools": typeof ToolsRouteRouteWithChildren;
+  "/tools/base64-text": typeof ToolsBase64TextRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "" | "/tool-1" | "/tool-2" | "/tool-3";
+  fullPaths: "/tools" | "/tools/base64-text";
   fileRoutesByTo: FileRoutesByTo;
-  to: "" | "/tool-1" | "/tool-2" | "/tool-3";
-  id:
-    | "__root__"
-    | "/_generic"
-    | "/_generic/tool-1"
-    | "/_generic/tool-2"
-    | "/_generic/tool-3";
+  to: "/tools" | "/tools/base64-text";
+  id: "__root__" | "/tools" | "/tools/base64-text";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  GenericRouteRoute: typeof GenericRouteRouteWithChildren;
+  ToolsRouteRoute: typeof ToolsRouteRouteWithChildren;
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  GenericRouteRoute: GenericRouteRouteWithChildren,
+  ToolsRouteRoute: ToolsRouteRouteWithChildren,
 };
 
 export const routeTree = rootRoute
@@ -159,28 +108,18 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_generic"
+        "/tools"
       ]
     },
-    "/_generic": {
-      "filePath": "_generic/route.tsx",
+    "/tools": {
+      "filePath": "tools/route.tsx",
       "children": [
-        "/_generic/tool-1",
-        "/_generic/tool-2",
-        "/_generic/tool-3"
+        "/tools/base64-text"
       ]
     },
-    "/_generic/tool-1": {
-      "filePath": "_generic/tool-1.lazy.tsx",
-      "parent": "/_generic"
-    },
-    "/_generic/tool-2": {
-      "filePath": "_generic/tool-2.lazy.tsx",
-      "parent": "/_generic"
-    },
-    "/_generic/tool-3": {
-      "filePath": "_generic/tool-3.lazy.tsx",
-      "parent": "/_generic"
+    "/tools/base64-text": {
+      "filePath": "tools/base64-text.tsx",
+      "parent": "/tools"
     }
   }
 }
