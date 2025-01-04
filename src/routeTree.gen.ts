@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
+import { Route as IndexImport } from "./routes/index";
 import { Route as ToolboxToolsRouteImport } from "./routes/toolbox/tools/route";
 import { Route as ToolboxToolsBase64TextImport } from "./routes/toolbox/tools/base64-text";
 
 // Create/Update Routes
+
+const IndexRoute = IndexImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => rootRoute,
+} as any);
 
 const ToolboxToolsRouteRoute = ToolboxToolsRouteImport.update({
   id: "/toolbox/tools",
@@ -34,6 +41,13 @@ const ToolboxToolsBase64TextRoute = ToolboxToolsBase64TextImport.update({
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     "/toolbox/tools": {
       id: "/toolbox/tools";
       path: "/toolbox/tools";
@@ -65,35 +79,40 @@ const ToolboxToolsRouteRouteWithChildren =
   ToolboxToolsRouteRoute._addFileChildren(ToolboxToolsRouteRouteChildren);
 
 export interface FileRoutesByFullPath {
+  "/": typeof IndexRoute;
   "/toolbox/tools": typeof ToolboxToolsRouteRouteWithChildren;
   "/toolbox/tools/base64-text": typeof ToolboxToolsBase64TextRoute;
 }
 
 export interface FileRoutesByTo {
+  "/": typeof IndexRoute;
   "/toolbox/tools": typeof ToolboxToolsRouteRouteWithChildren;
   "/toolbox/tools/base64-text": typeof ToolboxToolsBase64TextRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
   "/toolbox/tools": typeof ToolboxToolsRouteRouteWithChildren;
   "/toolbox/tools/base64-text": typeof ToolboxToolsBase64TextRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/toolbox/tools" | "/toolbox/tools/base64-text";
+  fullPaths: "/" | "/toolbox/tools" | "/toolbox/tools/base64-text";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/toolbox/tools" | "/toolbox/tools/base64-text";
-  id: "__root__" | "/toolbox/tools" | "/toolbox/tools/base64-text";
+  to: "/" | "/toolbox/tools" | "/toolbox/tools/base64-text";
+  id: "__root__" | "/" | "/toolbox/tools" | "/toolbox/tools/base64-text";
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute;
   ToolboxToolsRouteRoute: typeof ToolboxToolsRouteRouteWithChildren;
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   ToolboxToolsRouteRoute: ToolboxToolsRouteRouteWithChildren,
 };
 
@@ -107,8 +126,12 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/toolbox/tools"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/toolbox/tools": {
       "filePath": "toolbox/tools/route.tsx",
