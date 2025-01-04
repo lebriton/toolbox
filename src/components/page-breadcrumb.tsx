@@ -13,8 +13,10 @@ export const PageBreadcrumb = () => {
   const matches = useMatches();
 
   const crumbs = matches
+    // @ts-ignore
     .filter((match) => !!match.loaderData?.crumb)
     .map((match) => ({
+      // @ts-ignore
       crumb: match.loaderData.crumb,
       href: match.pathname,
     }));
