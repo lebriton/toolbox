@@ -1,16 +1,5 @@
-import { ChevronDown, FileDigit, LucideIcon, Star } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-} from "@/components/ui/sidebar";
+import { ChevronDown, FileDigit, LucideIcon } from "lucide-react";
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,7 +14,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 
 type NavItem = {
   title: string;
@@ -56,34 +44,6 @@ export function AppSidebar() {
           <NavGroup key={index} {...props} />
         ))}
       </SidebarContent>
-      <SidebarFooter>
-        <Card className="shadow-none">
-          <form>
-            <CardHeader className="p-4 pb-0">
-              <CardTitle className="text-sm">Support the project</CardTitle>
-              <CardDescription>
-                This collection of tools is released under the GPLv3 license.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-2.5 p-4">
-              <Button
-                className="w-full bg-sidebar-primary text-sidebar-primary-foreground shadow-none"
-                size="sm"
-                asChild
-              >
-                <a
-                  href="https://github.com/lebriton/toolbox"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Star />
-                  GitHub repository
-                </a>
-              </Button>
-            </CardContent>
-          </form>
-        </Card>
-      </SidebarFooter>
     </Sidebar>
   );
 }
