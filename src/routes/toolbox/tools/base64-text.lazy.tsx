@@ -123,7 +123,7 @@ function RouteComponent() {
               <Button
                 className={cn(
                   configWatch.conversionMode === "encode" &&
-                    "!bg-primary !text-primary-foreground",
+                    "!bg-sky-600 !text-primary-foreground",
                 )}
                 variant="outline"
                 onClick={() => config.setValue("conversionMode", "encode")}
@@ -134,7 +134,7 @@ function RouteComponent() {
               <Button
                 className={cn(
                   configWatch.conversionMode === "decode" &&
-                    "!bg-primary !text-primary-foreground",
+                    "!bg-amber-600 !text-primary-foreground",
                 )}
                 variant="outline"
                 onClick={() => config.setValue("conversionMode", "decode")}
