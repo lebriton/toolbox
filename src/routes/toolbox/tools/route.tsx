@@ -8,6 +8,9 @@ import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/toolbox/tools")({
   component: RouteComponent,
+  loader: () => ({
+    crumb: "Tools",
+  }),
 });
 
 function RouteComponent() {
