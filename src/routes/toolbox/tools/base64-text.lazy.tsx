@@ -218,13 +218,6 @@ function RouteComponent() {
         </PageSection>
 
         <PageSection>
-          {conversionError !== null && (
-            <Alert className="mb-2" variant="destructive">
-              <Frown className="h-4 w-4" />
-              <AlertTitle>Failed to convert input</AlertTitle>
-              <AlertDescription>{conversionError}</AlertDescription>
-            </Alert>
-          )}
           <FlexLine
             className="mb-1.5"
             start={<Label htmlFor="output">Output</Label>}
@@ -232,6 +225,7 @@ function RouteComponent() {
               <Button
                 variant="outline"
                 size="sm"
+                disabled={conversionError !== null}
                 onClick={() => {
                   setInput(output);
                   setOutput(input);
@@ -250,15 +244,24 @@ function RouteComponent() {
               </Button>
             }
           />
-          <ClipboardManager value={output}>
-            <Textarea
-              id="output"
-              className="bg-muted"
-              value={output}
-              rows={10}
-              readOnly
-            />
-          </ClipboardManager>
+
+          {conversionError !== null ? (
+            <Alert className="mb-2" variant="destructive">
+              <Frown className="h-4 w-4" />
+              <AlertTitle>Failed to convert input</AlertTitle>
+              <AlertDescription>{conversionError}</AlertDescription>
+            </Alert>
+          ) : (
+            <ClipboardManager value={output}>
+              <Textarea
+                id="output"
+                className="bg-muted"
+                value={output}
+                rows={10}
+                readOnly
+              />
+            </ClipboardManager>
+          )}
         </PageSection>
       </PageContent>
     </PageBody>
