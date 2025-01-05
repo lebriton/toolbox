@@ -207,19 +207,13 @@ function RouteComponent() {
             }
           />
 
-          <ClipboardManager
-            mode="paste"
-            component={(ref) => (
-              <Textarea
-                ref={ref}
-                id="input"
-                rows={10}
-                placeholder="Type (or paste) the text to encode or decode here."
-                autoFocus
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-              />
-            )}
+          <Textarea
+            id="input"
+            value={input}
+            placeholder="Type (or paste) the text to encode or decode here."
+            rows={10}
+            autoFocus
+            onChange={(event) => setInput(event.target.value)}
           />
         </PageSection>
 
@@ -256,18 +250,15 @@ function RouteComponent() {
               </Button>
             }
           />
-          <ClipboardManager
-            component={(ref) => (
-              <Textarea
-                ref={ref}
-                id="output"
-                className="bg-muted"
-                rows={10}
-                readOnly
-                value={output}
-              />
-            )}
-          />
+          <ClipboardManager value={output}>
+            <Textarea
+              id="output"
+              className="bg-muted"
+              value={output}
+              rows={10}
+              readOnly
+            />
+          </ClipboardManager>
         </PageSection>
       </PageContent>
     </PageBody>

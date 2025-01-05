@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import {
   Tooltip,
@@ -7,35 +7,43 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy, ClipboardPaste } from "lucide-react";
+import { Check, ClipboardCopy } from "lucide-react";
 
 export const ClipboardManager = ({
-  component,
-  mode = "copy",
-}: {
-  component: (ref: React.Ref<any>) => ReactNode;
-  mode?: "copy" | "paste";
-}) => {
-  const ref = React.useRef<any>(null);
+  value,
+  children,
+}: React.PropsWithChildren<{
+  value: string;
+}>) => {
+  const [copied, setCopied] = React.useState<boolean>(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+
+    // Reset the icon back to ClipboardCopy after 1 second
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
 
   return (
     <div className="relative">
-      {/* Call the component function and pass the ref */}
-      {component(ref)}
+      {children}
 
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="absolute right-2 top-2" asChild>
-            <Button variant="outline" size="icon">
-              {mode === "copy" && <ClipboardCopy />}
-              {mode === "paste" && <ClipboardPaste />}
+            <Button variant="outline" size="icon" onClick={handleCopy}>
+              {copied ? (
+                <Check className="text-green-600" />
+              ) : (
+                <ClipboardCopy />
+              )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>
-              {mode === "copy" && "Copy to clipboard"}
-              {mode === "paste" && "Paste from clipboard"}
-            </p>
+            <p>Copy to clipboard</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
